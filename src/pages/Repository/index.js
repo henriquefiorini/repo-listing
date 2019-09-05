@@ -83,7 +83,7 @@ class Repository extends Component {
     const { repository, issues, currentPage, isLoading } = this.state;
 
     if (isLoading) {
-      return <Loading>Carregando...</Loading>;
+      return <Loading>Loading...</Loading>;
     }
 
     return (
@@ -94,53 +94,55 @@ class Repository extends Component {
           <h1>{repository.name}</h1>
           <p>{repository.description}</p>
         </Owner>
-        <IssueList>
-          <Navigation>
-            <div>
-              <NavButton value="all" onClick={this.handleFilter}>
-                All
-              </NavButton>
-              <NavButton value="open" onClick={this.handleFilter}>
-                Open
-              </NavButton>
-              <NavButton value="closed" onClick={this.handleFilter}>
-                Closed
-              </NavButton>
-            </div>
-            <div>
-              <NavButton
-                value="previous"
-                disabled={currentPage === 1}
-                onClick={this.handlePagination}
-              >
-                Previous
-              </NavButton>
-              <NavButton value="next" onClick={this.handlePagination}>
-                Next
-              </NavButton>
-            </div>
-          </Navigation>
-          {issues.map(issue => (
-            <li key={String(issue.id)}>
-              <img src={issue.user.avatar_url} alt={issue.user.login} />
+        {issues && issues.length > 0 && (
+          <IssueList>
+            <Navigation>
               <div>
-                <strong>
-                  <a
-                    href={issue.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {issue.title}
-                  </a>
-                  {issue.labels.map(label => (
-                    <span key={String(label.id)}>{label.name}</span>
-                  ))}
-                </strong>
-                <p>{`${issue.state} | ${issue.user.login}`}</p>
+                <NavButton value="all" onClick={this.handleFilter}>
+                  All
+                </NavButton>
+                <NavButton value="open" onClick={this.handleFilter}>
+                  Open
+                </NavButton>
+                <NavButton value="closed" onClick={this.handleFilter}>
+                  Closed
+                </NavButton>
               </div>
-            </li>
-          ))}
-        </IssueList>
+              <div>
+                <NavButton
+                  value="previous"
+                  disabled={currentPage === 1}
+                  onClick={this.handlePagination}
+                >
+                  Previous
+                </NavButton>
+                <NavButton value="next" onClick={this.handlePagination}>
+                  Next
+                </NavButton>
+              </div>
+            </Navigation>
+            {issues.map(issue => (
+              <li key={String(issue.id)}>
+                <img src={issue.user.avatar_url} alt={issue.user.login} />
+                <div>
+                  <strong>
+                    <a
+                      href={issue.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {issue.title}
+                    </a>
+                    {issue.labels.map(label => (
+                      <span key={String(label.id)}>{label.name}</span>
+                    ))}
+                  </strong>
+                  <p>{`${issue.state} | ${issue.user.login}`}</p>
+                </div>
+              </li>
+            ))}
+          </IssueList>
+        )}
       </Container>
     );
   }

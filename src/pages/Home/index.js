@@ -48,7 +48,7 @@ class Home extends Component {
     try {
       const { newRepo, repositories } = this.state;
       if (repositories.find(r => r.name === newRepo)) {
-        throw new Error('Alreaddy exists.');
+        throw new Error('Already exists.');
       }
 
       const response = await api.get(`/repos/${newRepo}`);
