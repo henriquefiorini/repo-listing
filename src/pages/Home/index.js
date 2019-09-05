@@ -75,7 +75,7 @@ class Home extends Component {
       <Container>
         <Title>
           <FaGithubAlt />
-          Repositórios
+          Repositories
         </Title>
         <Form onSubmit={this.handleSubmit} hasError={hasError}>
           <input
