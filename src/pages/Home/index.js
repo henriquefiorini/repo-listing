@@ -13,6 +13,7 @@ class Home extends Component {
     newRepo: '',
     repositories: [],
     isLoading: false,
+    hasError: false,
   };
 
   componentDidMount() {
@@ -39,31 +40,47 @@ class Home extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    this.setState({ isLoading: true });
-    const { newRepo, repositories } = this.state;
-    const response = await api.get(`/repos/${newRepo}`);
-    const data = {
-      name: response.data.full_name,
-    };
     this.setState({
-      newRepo: '',
-      repositories: [...repositories, data],
-      isLoading: false,
+      isLoading: true,
+      hasError: false,
     });
+
+    try {
+      const { newRepo, repositories } = this.state;
+      if (repositories.find(r => r.name === newRepo)) {
+        throw new Error('Alreaddy exists.');
+      }
+
+      const response = await api.get(`/repos/${newRepo}`);
+      const data = {
+        name: response.data.full_name,
+      };
+      this.setState({
+        newRepo: '',
+        repositories: [...repositories, data],
+        isLoading: false,
+        hasError: false,
+      });
+    } catch (err) {
+      this.setState({
+        isLoading: false,
+        hasError: true,
+      });
+    }
   };
 
   render() {
-    const { newRepo, repositories, isLoading } = this.state;
+    const { newRepo, repositories, isLoading, hasError } = this.state;
     return (
       <Container>
         <Title>
           <FaGithubAlt />
           Repositórios
         </Title>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} hasError={hasError}>
           <input
             type="text"
-            placeholder="Adicionar repositório"
+            placeholder="Enter the repository name (e.g., facebook/react)"
             value={newRepo}
             onChange={this.handleInputChange}
           />
@@ -81,7 +98,7 @@ class Home extends Component {
               <li key={repo.name}>
                 <span>{repo.name}</span>
                 <Link to={`/repository/${encodeURIComponent(repo.name)}`}>
-                  Ver detalhes
+                  Details
                 </Link>
               </li>
             ))}

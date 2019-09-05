@@ -39,6 +39,33 @@ export const Owner = styled.div`
   }
 `;
 
+export const Navigation = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
+export const NavButton = styled.button.attrs(props => ({
+  type: 'button',
+  disabled: props.disabled,
+}))`
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  & + button {
+    margin-left: 12px;
+  }
+`;
+
 export const IssueList = styled.ul`
   margin-top: 32px;
   padding-top: 32px;

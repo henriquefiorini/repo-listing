@@ -22,8 +22,15 @@ export const Form = styled.form`
     border: 1px solid #eee;
     background-color: #fff;
     border-radius: 4px;
-    line-height: 1;
   }
+
+  ${props =>
+    props.hasError &&
+    css`
+      input {
+        border-color: red;
+      }
+    `}
 `;
 
 const rotate = keyframes`
